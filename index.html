@@ -3,47 +3,52 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Animated Nickname Generator</title>
+<title>Ultimate Nickname Generator</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;700&display=swap" rel="stylesheet">
 <style>
     body {
         margin: 0;
-        font-family: 'Segoe UI', sans-serif;
-        background: #1e1e1e;
-        color: white;
+        font-family: 'Montserrat', sans-serif;
+        background: linear-gradient(to bottom, #c8f0c8, #1e3d1e);
+        color: #1e3d1e;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: flex-start;
-        height: 100vh;
-        overflow: hidden;
+        min-height: 100vh;
+        overflow-y: auto;
     }
 
     h1 {
-        margin-top: 30px;
-        font-size: 2rem;
+        margin-top: 20px;
+        font-size: 2.5rem;
         text-align: center;
-        color: #00ff9c;
+        color: #1e3d1e;
+        text-shadow: 0 0 10px rgba(0,0,0,0.2);
     }
 
     #nicknames {
         margin-top: 20px;
-        width: 80%;
-        max-width: 500px;
-        min-height: 400px;
-        background: #121212;
-        border-radius: 10px;
+        width: 90%;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+        gap: 10px;
         padding: 20px;
-        overflow-y: auto;
-        box-shadow: 0 0 20px rgba(0,255,156,0.3);
+        box-sizing: border-box;
     }
 
     .nickname {
-        font-size: 1.4rem;
-        margin: 5px 0;
+        background: rgba(255,255,255,0.2);
+        padding: 8px 10px;
+        border-radius: 8px;
+        font-size: 1rem;
+        font-weight: 600;
+        text-align: center;
+        color: #1e3d1e;
         opacity: 0;
         transform: translateY(20px);
         transition: all 0.5s ease;
-        color: #00ff9c;
+        word-break: break-word;
     }
 
     .nickname.show {
@@ -52,19 +57,20 @@
     }
 
     button {
-        margin-top: 20px;
-        padding: 10px 25px;
+        margin: 20px;
+        padding: 12px 25px;
         font-size: 1.2rem;
-        background: #2d2d2d;
+        background: rgba(255,255,255,0.3);
         border: none;
-        color: white;
-        border-radius: 8px;
+        color: #1e3d1e;
+        border-radius: 10px;
         cursor: pointer;
         transition: all 0.3s ease;
+        font-weight: 700;
     }
 
     button:hover {
-        background: #3a3a3a;
+        background: rgba(255,255,255,0.5);
         transform: scale(1.05);
     }
 
@@ -72,46 +78,42 @@
 </head>
 <body>
 
-<h1>🔥 Nickname Generator</h1>
+<h1>🌿 Nickname Generator</h1>
 <div id="nicknames"></div>
-<button onclick="generateNicknames()">Generate</button>
+<button onclick="generateNicknames()">Generate 100 Nicknames</button>
 
 <script>
+// ===== Фрагменты для генерации =====
 const onsets = ["r","k","z","v","x","n","m","l","s","t","d","f",
 "kr","vr","zr","dr","tr","str","sk","st","gr","pr","kl","fl"];
-
 const vowels = ["a","e","i","o","u","y"];
-
 const cores = ["rex","nox","zen","vex","ryn","ziv","fal","var","sol","nyx",
 "kai","zor","dra","xel","vor","ser","lin","tal","ron","vek",
 "mir","lux","neo","aris","kael","niv","rav","aer","lyx",
 "thor","rix","lix","vyn","dax","nyr","sel","tor"];
-
 const endings = ["a","o","en","is","or","ar","el","ix","on","us","yn",
 "er","ir","al","ex","as","os"];
 
-// Функции генерации
+// ===== Генерация уникального ника =====
 function clean(name){
-    if(name.length >= 4 && name.length <=8){
-        return name.charAt(0).toUpperCase() + name.slice(1);
-    }
+    if(name.length >=4 && name.length<=8) return name.charAt(0).toUpperCase() + name.slice(1);
     return null;
 }
 
 function smartJoin(a,b){
     if(vowels.includes(a.slice(-1)) && vowels.includes(b[0])) b = b.slice(1);
     if(!vowels.includes(a.slice(-1)) && !vowels.includes(b[0])) b = vowels[Math.floor(Math.random()*vowels.length)] + b;
-    return a + b;
+    return a+b;
 }
 
 function generateName(){
     const patterns = [
-        () => cores[Math.floor(Math.random()*cores.length)] + endings[Math.floor(Math.random()*endings.length)],
-        () => smartJoin(onsets[Math.floor(Math.random()*onsets.length)], cores[Math.floor(Math.random()*cores.length)]),
-        () => smartJoin(cores[Math.floor(Math.random()*cores.length)], cores[Math.floor(Math.random()*cores.length)].slice(0,3)),
-        () => cores[Math.floor(Math.random()*cores.length)].slice(0,3) + endings[Math.floor(Math.random()*endings.length)],
-        () => smartJoin(onsets[Math.floor(Math.random()*onsets.length)], cores[Math.floor(Math.random()*cores.length)]).slice(0,8),
-        () => cores[Math.floor(Math.random()*cores.length)].slice(0,4)
+        ()=>cores[Math.floor(Math.random()*cores.length)] + endings[Math.floor(Math.random()*endings.length)],
+        ()=>smartJoin(onsets[Math.floor(Math.random()*onsets.length)], cores[Math.floor(Math.random()*cores.length)]),
+        ()=>smartJoin(cores[Math.floor(Math.random()*cores.length)], cores[Math.floor(Math.random()*cores.length)].slice(0,3)),
+        ()=>cores[Math.floor(Math.random()*cores.length)].slice(0,3) + endings[Math.floor(Math.random()*endings.length)],
+        ()=>smartJoin(onsets[Math.floor(Math.random()*onsets.length)], cores[Math.floor(Math.random()*cores.length)]).slice(0,8),
+        ()=>cores[Math.floor(Math.random()*cores.length)].slice(0,4)
     ];
     while(true){
         let name = patterns[Math.floor(Math.random()*patterns.length)]();
@@ -120,21 +122,22 @@ function generateName(){
     }
 }
 
-// Плавная анимация появления
+// ===== Генерация 100 никнеймов =====
 function generateNicknames(){
     const container = document.getElementById("nicknames");
     container.innerHTML = "";
-    let names = [];
-    for(let i=0;i<20;i++){
-        names.push(generateName());
+    let names = new Set();
+    while(names.size<100){
+        names.add(generateName());
     }
+    names = Array.from(names);
 
     names.forEach((name,index)=>{
         let div = document.createElement("div");
-        div.className = "nickname";
-        div.textContent = name;
+        div.className="nickname";
+        div.textContent=name;
         container.appendChild(div);
-        setTimeout(()=>{div.classList.add("show")}, index*150);
+        setTimeout(()=>{div.classList.add("show")}, index*20); // плавная анимация
     });
 }
 </script>
